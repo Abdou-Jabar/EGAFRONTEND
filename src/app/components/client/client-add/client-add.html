@@ -1,0 +1,84 @@
+<div class="p-4 sm:p-8 bg-gray-50 min-h-screen flex justify-center">
+    <div class="w-full max-w-3xl bg-white shadow-md rounded-xl p-6 border border-gray-200">
+
+        <div class="flex justify-between items-center mb-6">
+            <h2 class="text-2xl font-bold text-gray-800 border-l-4 border-blue-600 pl-4">
+                Ajouter un Nouveau Client
+            </h2>
+        </div>
+
+        <form [formGroup]="form" (ngSubmit)="onSubmit()" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+            <div>
+                <label class="block text-gray-700 text-sm font-medium mb-1">Nom</label>
+                <input type="text" formControlName="nom"
+                    class="w-full px-4 py-2 border rounded-lg shadow-sm focus:ring-2 focus:ring-blue-600" />
+            </div>
+
+            <div>
+                <label class="block text-gray-700 text-sm font-medium mb-1">Prénom</label>
+                <input type="text" formControlName="prenom"
+                    class="w-full px-4 py-2 border rounded-lg shadow-sm focus:ring-2 focus:ring-blue-600" />
+            </div>
+
+            <div>
+                <label class="block text-gray-700 text-sm font-medium mb-1">Date de naissance</label>
+                <input type="date" formControlName="dateNaissance"
+                    class="w-full px-4 py-2 border rounded-lg shadow-sm focus:ring-2 focus:ring-blue-600" />
+            </div>
+
+            <div>
+                <label class="block text-gray-700 text-sm font-medium mb-1">Sexe</label>
+                <select formControlName="sexe"
+                    class="w-full px-4 py-2 border rounded-lg shadow-sm bg-white focus:ring-2 focus:ring-blue-600">
+                    <option value="" disabled>-- Choisir --</option>
+                    <option>Masculin</option>
+                    <option>Féminin</option>
+                </select>
+            </div>
+
+            <div>
+                <label class="block text-gray-700 text-sm font-medium mb-1">Téléphone</label>
+                <input type="text" formControlName="telephone"
+                    class="w-full px-4 py-2 border rounded-lg shadow-sm focus:ring-2 focus:ring-blue-600" />
+            </div>
+
+            <div>
+                <label class="block text-gray-700 text-sm font-medium mb-1">Email</label>
+                <input type="email" formControlName="email"
+                    class="w-full px-4 py-2 border rounded-lg shadow-sm focus:ring-2 focus:ring-blue-600" />
+            </div>
+
+            <div>
+                <label class="block text-gray-700 text-sm font-medium mb-1">Nationalité</label>
+                <input type="text" formControlName="nationalite"
+                    class="w-full px-4 py-2 border rounded-lg shadow-sm focus:ring-2 focus:ring-blue-600" />
+            </div>
+
+            <div>
+                <label class="block text-gray-700 text-sm font-medium mb-1">Type de compte</label>
+                <select formControlName="typeCompte"
+                    class="w-full px-4 py-2 border rounded-lg shadow-sm bg-white focus:ring-2 focus:ring-blue-600">
+                    <option value="Epargne">Épargne</option>
+                    <option value="Courant">Courant</option>
+                </select>
+            </div>
+
+            <!-- ACTIONS -->
+            <div class="col-span-full flex justify-end gap-3 mt-8">
+
+                <a [routerLink]="['/client']">
+                    <button class="px-4 py-2 bg-gray-200 rounded-lg hover:bg-gray-300 transition" type="button">
+                        Annuler
+                    </button>
+                </a>
+
+                <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition">
+                    Enregistrer
+                </button>
+            </div>
+
+        </form>
+
+    </div>
+</div>

@@ -1,0 +1,89 @@
+import { Component, OnInit, inject, signal } from '@angular/core';
+import { ClientService } from '../../../services/client.service';
+import { Client as ClientModel } from '../../../models/client.model';
+import { DatePipe, UpperCasePipe} from '@angular/common';
+import { RouterLink } from '@angular/router';
+import { MatSnackBar } from '@angular/material/snack-bar';
+
+
+@Component({
+  selector: 'app-client',
+  standalone: true, 
+  imports: [DatePipe, UpperCasePipe, RouterLink],
+  templateUrl: './client-list.html',
+  styleUrl: './client-list.css'
+})
+export class Client implements OnInit {
+  clients: ClientModel[] = [];
+  clientsFiltres: ClientModel[] = [];
+
+  clientToDelete: ClientModel | null = null;
+    constructor(private snack: MatSnackBar) {}
+  
+  private clientService = inject(ClientService);
+
+  ngOnInit(): void {
+    this.chargerClients();
+  }
+  showDeleteModal = signal(false);
+  loading = signal(true);
+
+chargerClients(): void {
+  this.clientService.getClients().subscribe({
+    next: (data) => {
+      this.clients = data;
+      this.clientsFiltres = data;
+      this.loading.set(false);
+    },
+    error: (err) => {
+      console.error('Erreur chargement clients', err);
+      this.loading.set(false);
+    }
+  });
+}
+
+  onSearch(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    const query = input.value.toLowerCase().trim();
+    if (!query) {
+      this.clientsFiltres = this.clients;
+      return;
+    }
+    this.clientsFiltres = this.clients.filter(client => 
+      client.nom.toLowerCase().includes(query) || 
+      client.prenom.toLowerCase().includes(query) ||
+      client.email.toLowerCase().includes(query)
+    );
+  }
+
+  openDeleteModal(client: ClientModel): void {
+    this.clientToDelete = client;
+    this.showDeleteModal.set(true);
+  }
+
+  closeDeleteModal(): void {
+    this.showDeleteModal.set(false);
+    this.clientToDelete = null;
+  }
+  
+  confirmDelete(): void {
+  if (!this.clientToDelete?.id) return;
+
+  const id = this.clientToDelete.id;
+
+  this.clientService.deleteClient(id).subscribe({
+    next: () => {
+      this.clients = this.clients.filter(c => c.id !== id);
+      this.clientsFiltres = this.clientsFiltres.filter(c => c.id !== id);
+      this.closeDeleteModal();
+      this.snack.open('Client supprimé', 'X', {
+        duration: 3000,
+        panelClass: 'success-snackbar'
+      });
+    },
+    error: (err) => {
+      console.error('Erreur suppression client', err);
+    }
+  });
+}
+}

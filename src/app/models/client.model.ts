@@ -4,9 +4,12 @@ export enum Sexe {
 }
 
 export interface Client {
+    dateInscription: string|number|Date;
     id?: number;
     nom: string;
     prenom: string;
+    dateNaissance: string|number|Date;
+    nationalite: string;
     email: string;
     sexe: Sexe;
     telephone?: string;
