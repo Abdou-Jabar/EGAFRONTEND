@@ -1,6 +1,6 @@
 @if (loading()) {
-    <div class="p-4 sm:p-8 bg-gray-50 min-h-screen">
-        Chargement des clients...
+    <div class="flex justify-center items-center h-64">
+        <div class="animate-spin rounded-full h-10 w-10 border-b-2 border-blue-600"></div>
     </div>
 }
 @else {
@@ -117,7 +117,8 @@
         <p class="text-gray-600 mb-6">
             Voulez-vous vraiment supprimer
             <span class="font-semibold text-red-600">
-                {{ clientToDelete?.nom | uppercase }} {{ clientToDelete?.prenom }}
+                {{ clientToDelete?.nom | uppercase }}
+                {{ clientToDelete?.prenom }}
             </span>
             ?
         </p>

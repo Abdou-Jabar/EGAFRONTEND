@@ -20,6 +20,7 @@ import { LayoutDashboard,
 })
 export class SidebarComponent {
   readonly Building2 = Building2;
+  readonly LogOut = LogOut;
   menuItems = [
     { label: 'Tableau de bord', icon: LayoutDashboard, route: '/dashboard' },
     { label: 'Clients', icon: Users, route: '/client' },
