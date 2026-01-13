@@ -1,139 +1,113 @@
-@if (loading()) {
-    <div class="flex justify-center items-center h-64">
-        <div class="animate-spin rounded-full h-10 w-10 border-b-2 border-blue-600"></div>
+<div class="space-y-8">
+
+    <div>
+        <h1 class="text-2xl font-bold text-slate-800">Répertoire des Clients</h1>
+        <p class="text-slate-500">Gérez les informations des clients de la Banque Ega</p>
     </div>
-}
-@else {
-    <div class="p-4 sm:p-8 bg-gray-50 min-h-screen">
-        <div class="max-w-7xl mx-auto">
-            <div class="flex justify-between items-center mb-6">
-                <h2 class="text-2xl font-bold text-gray-800 border-l-4 border-blue-600 pl-4">Répertoire des Clients</h2>
-                <span class="bg-blue-100 text-blue-800 text-xs font-semibold px-2.5 py-0.5 rounded-full">
-                    {{ clients.length }} Client(s)
-                </span>
-            </div>
-            <div class="flex flex-col md:flex-row gap-4 mb-6 items-center justify-between">
-            
-                <div class="relative w-full md:w-96">
-                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                        <svg class="h-5 w-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                        </svg>
-                    </div>
-                    <input type="text" (input)="onSearch($event)"
-                        class="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg leading-5 bg-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-blue-600 sm:text-sm transition shadow-sm"
-                        placeholder="Rechercher par nom ou prénom...">
+
+    @if (loading()) {
+    <div class="flex flex-col justify-center items-center h-64 space-y-4">
+        <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+        <p class="text-slate-400 text-sm animate-pulse">Chargement des clients...</p>
+    </div>
+    }
+    @else {
+    <div class="space-y-6">
+        <div class="flex flex-col md:flex-row gap-4 items-center justify-between">
+            <div class="relative w-full md:w-96">
+                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                    <lucide-icon [name]="Search" class="w-5 h-5 text-slate-400"></lucide-icon>
                 </div>
-            
-                <a [routerLink]="['/client/ajouter']" class="flex items-center justify-center px-5 py-2.5 bg-blue-600 hover:bg-blue-700 
-                        text-white text-sm font-semibold rounded-lg shadow-md hover:shadow-lg 
-                        transition-all transform active:scale-95 w-full md:w-auto">
+                <input type="text" (input)="onSearch($event)"
+                    class="block w-full pl-10 pr-3 py-2 border border-slate-200 rounded-xl leading-5 bg-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent sm:text-sm transition shadow-sm"
+                    placeholder="Rechercher un client...">
+            </div>
 
-                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
-                    </svg>
-
+            <div class="flex items-center gap-3 w-full md:w-auto">
+                <span
+                    class="hidden md:inline-flex bg-slate-100 text-slate-600 text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider">
+                    {{ clients.length }} Total
+                </span>
+                <a [routerLink]="['/client/ajouter']"
+                    class="flex items-center justify-center px-5 py-2.5 bg-blue-600 hover:bg-blue-700 text-white text-sm font-bold rounded-xl shadow-sm transition-all transform active:scale-95 w-full md:w-auto">
+                    <lucide-icon [name]="Plus" class="w-5 h-5 mr-2"></lucide-icon>
                     Nouveau Client
                 </a>
-
-            </div>
-
-            <div class="bg-white shadow-md rounded-xl overflow-hidden border border-gray-200">
-                <div class="overflow-x-auto">
-                    <table class="w-full text-left text-sm">
-                        <thead class="bg-gray-50 text-gray-600 border-b">
-                            <tr>
-                                <th class="px-6 py-4 font-semibold uppercase tracking-wider">Identité</th>
-                                <th class="px-6 py-4 font-semibold uppercase tracking-wider">Contact</th>
-                                <th class="px-6 py-4 font-semibold uppercase tracking-wider">Sexe / Nationalité</th>
-                                <th class="px-6 py-4 font-semibold uppercase tracking-wider">Inscription</th>
-                                <th class="px-6 py-4 font-semibold uppercase tracking-wider text-center">Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody class="divide-y divide-gray-100">
-                            @for (c of clientsFiltres; track c.id){
-                            <tr class="hover:bg-gray-50 transition-colors">
-                                <td class="px-6 py-4">
-                                    <div class="font-bold text-gray-900">{{ c.nom | uppercase }}</div>
-                                    <div class="text-gray-500 text-xs">{{ c.prenom }}</div>
-                                    <div class="text-[10px] text-blue-500 italic"> {{ c.dateNaissance |
-                                        date:'dd/MM/yyyy' }}</div>
-                                </td>
-                                <td class="px-6 py-4">
-                                    <div class="flex items-center text-gray-700">
-                                        <span class="mr-2">📧</span> {{ c.email }}
-                                    </div>
-                                    <div class="flex items-center text-gray-500 mt-1">
-                                        <span class="mr-2">📞</span> {{ c.telephone }}
-                                    </div>
-                                </td>
-                                <td class="px-6 py-4">
-                                    <div class="text-gray-700 font-medium">{{ c.sexe }}</div>
-                                    <div class="text-gray-500 text-xs">{{ c.nationalite }}</div>
-                                </td>
-                                <td class="px-6 py-4">
-                                    <div class="text-gray-700">{{ c.dateInscription | date:'mediumDate' }}</div>
-                                    <div class="text-gray-400 text-[10px]">{{ c.dateInscription | date:'HH:mm' }}</div>
-                                </td>
-                                <td class="px-6 py-4 text-center">
-                                    <div class="flex justify-center space-x-2">
-                                        <button class="p-2 hover:bg-blue-100 rounded-full text-blue-600 transition"
-                                            title="Modifier">
-                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none"
-                                                viewBox="0 0 24 24" stroke="currentColor">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                    d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
-                                            </svg>
-                                        </button>
-                                        <button class="p-2 hover:bg-red-100 rounded-full text-red-600 transition"
-                                            title="Supprimer" (click)="openDeleteModal(c)">
-                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none"
-                                                viewBox="0 0 24 24" stroke="currentColor">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                    d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                                            </svg>
-                                        </button>
-                                    </div>
-                                </td>
-                            </tr>
-                        }
-                        </tbody>
-                    </table>
-                </div>
             </div>
         </div>
-    </div> 
-}
+
+        <div class="bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden">
+            <div class="overflow-x-auto">
+                <table class="w-full text-left text-sm">
+                    <thead class="bg-slate-50/50 text-slate-500 border-b border-slate-100">
+                        <tr>
+                            <th class="px-6 py-4 font-bold uppercase text-[11px] tracking-widest">Identité</th>
+                            <th class="px-6 py-4 font-bold uppercase text-[11px] tracking-widest">Contact</th>
+                            <th class="px-6 py-4 font-bold uppercase text-[11px] tracking-widest">Sexe / Nationalité
+                            </th>
+                            <th class="px-6 py-4 font-bold uppercase text-[11px] tracking-widest text-center">Actions
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-slate-50">
+                        @for (c of clientsFiltres; track c.id){
+                        <tr class="hover:bg-slate-50/50 transition-colors group">
+                            <td class="px-6 py-4">
+                                <div class="font-bold text-slate-800">{{ c.nom | uppercase }}</div>
+                                <div class="text-slate-500 text-xs">{{ c.prenom }}</div>
+                                <div class="text-[10px] text-blue-500 font-medium mt-1">Né(e) le {{ c.dateNaissance |
+                                    date:'dd/MM/yyyy' }}</div>
+                            </td>
+                            <td class="px-6 py-4">
+                                <div class="text-slate-700 font-medium italic text-xs">{{ c.email }}</div>
+                                <div class="text-slate-500 text-xs mt-1 font-mono">{{ c.telephone }}</div>
+                            </td>
+                            <td class="px-6 py-4">
+                                <div class="text-slate-800 font-semibold">{{ c.sexe }}</div>
+                                <div class="text-slate-400 text-xs">{{ c.nationalite }}</div>
+                            </td>
+                            <td class="px-6 py-4">
+                                <div class="flex justify-center gap-2">
+                                    <button
+                                        class="p-2 text-slate-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors">
+                                        <lucide-icon [name]="Edit" class="w-4 h-4"></lucide-icon>
+                                    </button>
+                                    <button
+                                        class="p-2 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+                                        (click)="openDeleteModal(c)">
+                                        <lucide-icon [name]="Trash2" class="w-4 h-4"></lucide-icon>
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    }
+</div>
 
 @if (showDeleteModal()) {
-<div class="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-    <div class="bg-white rounded-xl shadow-xl w-full max-w-md p-6">
-
-        <h3 class="text-lg font-bold text-gray-800 mb-4">
-            Confirmation de suppression
-        </h3>
-
-        <p class="text-gray-600 mb-6">
-            Voulez-vous vraiment supprimer
-            <span class="font-semibold text-red-600">
-                {{ clientToDelete?.nom | uppercase }}
-                {{ clientToDelete?.prenom }}
-            </span>
-            ?
-        </p>
-
-        <div class="flex justify-end gap-3">
-            <button class="px-4 py-2 rounded-lg bg-gray-200 hover:bg-gray-300 transition" (click)="closeDeleteModal()">
-                Annuler
-            </button>
-
-            <button class="px-4 py-2 rounded-lg bg-red-600 hover:bg-red-700 text-white transition"
-                (click)="confirmDelete()">
-                Supprimer
-            </button>
+<div class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+    <div class="bg-white rounded-3xl shadow-2xl w-full max-w-md p-8 border border-slate-100">
+        <div class="w-12 h-12 bg-red-50 text-red-600 rounded-2xl flex items-center justify-center mb-6">
+            <lucide-icon [name]="AlertTriangle" class="w-6 h-6"></lucide-icon>
         </div>
-
+        <h3 class="text-xl font-bold text-slate-800 mb-2">Supprimer le client ?</h3>
+        <p class="text-slate-500 mb-8 leading-relaxed">
+            Cette action est irréversible. Le client <span class="font-bold text-slate-800">{{ clientToDelete?.nom
+                }} {{ clientToDelete?.prenom }}</span> sera retiré de la base de données.
+        </p>
+        <div class="flex gap-3">
+            <button
+                class="flex-1 px-4 py-3 rounded-xl bg-slate-100 text-slate-600 font-bold hover:bg-slate-200 transition"
+                (click)="closeDeleteModal()">Annuler</button>
+            <button
+                class="flex-1 px-4 py-3 rounded-xl bg-red-600 text-white font-bold hover:bg-red-700 shadow-lg shadow-red-200 transition"
+                (click)="confirmDelete()">Supprimer</button>
+        </div>
     </div>
 </div>
-}
+}  

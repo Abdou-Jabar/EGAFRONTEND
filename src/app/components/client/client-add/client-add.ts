@@ -3,15 +3,18 @@ import { FormBuilder, Validators, ReactiveFormsModule } from '@angular/forms';
 import { ClientService } from '../../../services/client.service';
 import { Router, RouterLink } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { UserPlus, Save, LucideAngularModule } from 'lucide-angular';
 
 @Component({
   selector: 'app-client-add',
   standalone: true,
-  imports: [ReactiveFormsModule, RouterLink],
+  imports: [ReactiveFormsModule, RouterLink, LucideAngularModule],
   templateUrl: './client-add.html',
   styleUrl: './client-add.css',
 })
 export class ClientAdd {
+  readonly UserPlus = UserPlus;
+  readonly Save = Save;
   fb = inject(FormBuilder);
   clientService = inject(ClientService);
   router = inject(Router);

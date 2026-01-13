@@ -4,15 +4,22 @@ import { Client as ClientModel } from '../../../models/client.model';
 import { DatePipe, UpperCasePipe } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { Plus, Search, Edit, Trash2, LucideAngularModule, AlertTriangle } from 'lucide-angular';
 
 @Component({
   selector: 'app-client',
   standalone: true,
-  imports: [DatePipe, UpperCasePipe, RouterLink],
+  imports: [DatePipe, UpperCasePipe, RouterLink, LucideAngularModule],
   templateUrl: './client-list.html',
   styleUrl: './client-list.css'
 })
 export class ClientList implements OnInit {
+
+  readonly Plus = Plus;
+  readonly Search = Search
+  readonly Edit = Edit;
+  readonly Trash2 = Trash2;
+  readonly AlertTriangle = AlertTriangle;
 
   clients: ClientModel[] = [];
   clientsFiltres: ClientModel[] = [];

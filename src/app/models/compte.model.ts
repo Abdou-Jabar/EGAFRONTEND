@@ -11,4 +11,5 @@ export interface Compte {
     type: TypeCompte;
     estSupprime: boolean;
     client?: Client;
+    dateCreation?: string;
 }

@@ -1,3 +1,5 @@
+import { Compte } from "./compte.model";
+
 export enum TypeTransaction {
     Depot = 'Depot',
     Retrait = 'Retrait',
@@ -9,6 +11,6 @@ export interface Transaction {
     montant: number;
     dateTransaction: string;
     type: TypeTransaction;
-    numeroCompteSource?: string;
-    numeroCompteDestination?: string;
+    compteSource?: Compte;
+    compteDestination?: Compte;
 }
