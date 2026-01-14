@@ -1,3 +1,5 @@
+import { Compte } from "./compte.model";
+
 export enum Sexe {
     Masculin = 'Masculin',
     Feminin = 'Feminin'
@@ -14,4 +16,5 @@ export interface Client {
     sexe: Sexe;
     telephone?: string;
     estSupprime: boolean;
+    comptes: Compte[];
 }

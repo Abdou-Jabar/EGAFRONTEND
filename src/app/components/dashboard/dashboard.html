@@ -90,22 +90,22 @@
                         
                             <p class="text-xs text-slate-600 font-medium">
                                 @if (t.type === 'Virement') {
-                                <span class="text-blue-600">{{ t.compteSource?.client?.prenom }} {{ t.compteSource?.client?.nom }}</span>
-                                <span class="mx-1 text-slate-400">➔</span>
-                                <span class="text-emerald-600">{{ t.compteDestination?.client?.prenom }} {{ t.compteDestination?.client?.nom }}</span>
+                                    <span class="text-blue-600">{{ t.compteSource?.client?.prenom }} {{ t.compteSource?.client?.nom }}</span>
+                                    <span class="mx-1 text-slate-400">➔</span>
+                                    <span class="text-emerald-600">{{ t.compteDestination?.client?.prenom }} {{ t.compteDestination?.client?.nom }}</span>
                                 }
                                 @else if (t.type === 'Depot') {
-                                {{ t.compteDestination?.client?.prenom }} {{ t.compteDestination?.client?.nom }}
+                                    {{ t.compteDestination?.client?.prenom }} {{ t.compteDestination?.client?.nom }}
                                 }
                                 @else {
-                                {{ t.compteSource?.client?.prenom }} {{ t.compteSource?.client?.nom }}
+                                    {{ t.compteSource?.client?.prenom }} {{ t.compteSource?.client?.nom }}
                                 }
                             </p>
                             <p class="text-[10px] text-slate-400 font-mono italic">
                                 @if (t.type === 'Virement') {
-                                #{{ t.compteSource?.id }} ➔ #{{ t.compteDestination?.id }}
+                                    #{{ t.compteSource?.id }} ➔ #{{ t.compteDestination?.id }}
                                 } @else {
-                                #{{ t.type === 'Depot' ? t.compteDestination?.id : t.compteSource?.id }}
+                                    #{{ t.type === 'Depot' ? t.compteDestination?.id : t.compteSource?.id }}
                                 }
                             </p>
                         </div>

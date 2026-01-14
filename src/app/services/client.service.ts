@@ -20,6 +20,14 @@ export class ClientService {
     return this.http.post<void>(`${this.apiUrl}/ajouter`, data);
   }
 
+  getClientById(id: number): Observable<Client> {
+    return this.http.get<Client>(`${this.apiUrl}/${id}`);
+  }
+
+  updateClient(id: number, client: Client): Observable<Client> {
+    return this.http.put<Client>(`${this.apiUrl}/modifier/${id}`, client);
+  }
+
   deleteClient(id: number): Observable<string> {
     return this.http.put(
       `${this.apiUrl}/supprimer/${id}`,
