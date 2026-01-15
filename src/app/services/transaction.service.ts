@@ -12,10 +12,27 @@ export class TransactionService {
   constructor(private http: HttpClient) {}
 
   deposer(numeroCompte: string, montant: number): Observable<string> {
+    const dto = {
+      numeroCompteDestination: numeroCompte,
+      solde: montant
+    };
+    return this.http.post(`${this.apiUrl}/deposer`, dto, { responseType: 'text' });
+  }
+
+  retirer(numeroCompte: string, montant: number): Observable<string> {
+    const dto = {
+      numeroCompteSource: numeroCompte, 
+      solde: montant 
+    };
+    return this.http.post(`${this.apiUrl}/retirer`, dto, { responseType: 'text' });
+  }
+
+  virement(source: string, destination: string, montant: number): Observable<string> {
   const dto = {
-    numeroCompteDestination: numeroCompte,
+    numeroCompteSource: source,
+    numeroCompteDestination: destination,
     solde: montant
   };
-  return this.http.post(`${this.apiUrl}/deposer`, dto, { responseType: 'text' });
+  return this.http.post(`${this.apiUrl}/virement`, dto, { responseType: 'text' });
 }
 }

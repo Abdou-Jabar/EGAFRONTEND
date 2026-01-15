@@ -19,4 +19,7 @@ export class CompteService {
       .set('type', typeCompte);
     return this.http.post<Compte>(`${this.apiUrl}/compte/ajouter`, null, { params });
   }
+  supprimerCompte(id: string): Observable<string> {
+    return this.http.put(`${this.apiUrl}/compte/supprimer/${id}`, {}, { responseType: 'text' });
+  }
 }

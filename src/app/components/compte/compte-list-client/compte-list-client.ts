@@ -36,6 +36,11 @@ export class CompteListClient implements OnInit {
   isDepositModalOpen = signal(false);
   selectedCompte = signal<CompteModel | null>(null);
   depositForm: FormGroup;
+  isWithdrawModalOpen = signal(false);
+  withdrawForm: FormGroup;
+  isTransferModalOpen = signal(false);
+  transferForm: FormGroup;
+  isDeleteModalOpen = signal(false);
 
   openAddAccountModal() {
     this.isModalOpen.set(true);
@@ -58,29 +63,35 @@ constructor(
   });
   this.depositForm = this.fb.group({
       montant: [null, [Validators.required, Validators.min(500)]] 
-    });
+  });
+  this.withdrawForm = this.fb.group({
+      montant: [null, [Validators.required, Validators.min(500)]] 
+  });
+  this.transferForm = this.fb.group({
+      montant: [null, [Validators.required, Validators.min(500)]],
+      compteDestination: [null, Validators.required]
+  });
 }
 
   onSubmitAccount() {
-  if (this.accountForm.valid && this.client?.id) {
-    const typeChoisi = this.accountForm.value.typeCompte;
-    const clientId = this.client.id;
+    if (this.accountForm.valid && this.client?.id) {
+      const typeChoisi = this.accountForm.value.typeCompte;
+      const clientId = this.client.id;
 
-    this.compteService.creerCompte(clientId, typeChoisi).subscribe({
-      next: (nouveauCompte) => {
-        this.comptes = [...this.comptes, nouveauCompte];
-        this.closeAddAccountModal();
-        this.snack.open('Compte crée avec succès', 'X', {
-          duration: 4000,
-          panelClass: 'success-snackbar'
-        });      },
-      error: (err) => {
-        console.error("Erreur lors de la création :", err);
-        alert("Impossible de créer le compte. Vérifiez si le type est correct.");
-      }
-    });
+      this.compteService.creerCompte(clientId, typeChoisi).subscribe({
+        next: (nouveauCompte) => {
+          this.comptes = [...this.comptes, nouveauCompte];
+          this.closeAddAccountModal();
+          this.snack.open('Compte crée avec succès', 'X', {
+            duration: 3000,
+            panelClass: 'success-snackbar'
+          });      },
+        error: (err) => {
+          console.error("Erreur lors de la création :", err);
+        }
+      });
+    }
   }
-}
 
   ngOnInit() {
     const id = Number(this.route.snapshot.paramMap.get('id'));
@@ -132,5 +143,110 @@ constructor(
       });
     }
   }
-  
+
+  openWithdrawModal(compte: CompteModel) {
+    this.selectedCompte.set(compte);
+    this.isWithdrawModalOpen.set(true);
+  }
+
+  closeWithdrawModal() {
+    this.isWithdrawModalOpen.set(false);
+    this.withdrawForm.reset();
+    this.selectedCompte.set(null);
+  }
+
+  onConfirmWithdraw() {
+    if (this.withdrawForm.valid && this.selectedCompte()) {
+      const compte = this.selectedCompte()!;
+      const montant = this.withdrawForm.value.montant;
+      if (montant > compte.solde) {
+        this.snack.open('Solde insuffisant pour ce retrait', 'X', { duration: 3000 });
+        return;
+      }
+      this.transactionService.retirer(compte.id, montant).subscribe({
+        next: (response) => {
+          this.comptes = this.comptes.map(c => 
+            c.id === compte.id ? { ...c, solde: c.solde - montant } : c
+          );
+          this.snack.open(response, 'Fermer', { duration: 3000 });
+          this.closeWithdrawModal();
+        },
+        error: (err) => {
+          this.snack.open('Erreur lors du retrait', 'X', { duration: 3000 });
+        }
+      });
+    }
+  }
+
+  openTransferModal(compte: CompteModel) {
+    this.selectedCompte.set(compte);
+    this.isTransferModalOpen.set(true);
+  }
+
+  closeTransferModal() {
+    this.isTransferModalOpen.set(false);
+    this.transferForm.reset();
+  }
+
+  onConfirmTransfer() {
+    if (this.transferForm.valid && this.selectedCompte()) {
+      const source = this.selectedCompte()!.id;
+      const destination = this.transferForm.value.compteDestination;
+      const montant = this.transferForm.value.montant;
+
+      if (montant > this.selectedCompte()!.solde) {
+        this.snack.open('Solde insuffisant', 'X', { duration: 3000 });
+        return;
+      }
+
+      this.transactionService.virement(source, destination, montant).subscribe({
+        next: (res) => {
+          this.comptes = this.comptes.map(c => 
+            c.id === source ? { ...c, solde: c.solde - montant } : c
+          );
+          this.comptes = this.comptes.map(c => 
+            c.id === destination ? { ...c, solde: c.solde + montant } : c
+          );
+
+          this.snack.open(res, 'Fermer', { duration: 3000 });
+          this.closeTransferModal();
+        },
+        error: () => this.snack.open('Erreur : Vérifiez l\'IBAN destination', 'X')
+      });
+    }
+  }
+
+  openDeleteModal(compte: CompteModel) {
+    this.selectedCompte.set(compte);
+    this.isDeleteModalOpen.set(true);
+  }
+
+  closeDeleteModal() {
+    this.isDeleteModalOpen.set(false);
+    this.selectedCompte.set(null);
+  }
+
+  onConfirmDelete() {
+    const compteASupprimer = this.selectedCompte();
+    
+    if (compteASupprimer) {
+      this.compteService.supprimerCompte(compteASupprimer.id).subscribe({
+        next: (message) => {
+          this.comptes = this.comptes.filter(c => c.id !== compteASupprimer.id);
+        
+          this.snack.open(message, 'X', { 
+            duration: 3000,
+            panelClass: ['success-snackbar']
+          });
+          
+          this.closeDeleteModal();
+        },
+        error: (err) => {
+          console.error("Erreur suppression:", err);
+          this.snack.open("Erreur lors de la suppression du compte", "X", { duration: 3000 });
+          this.closeDeleteModal();
+        }
+      });
+    }
+  }
 }
