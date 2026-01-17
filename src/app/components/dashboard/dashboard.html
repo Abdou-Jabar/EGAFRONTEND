@@ -3,7 +3,6 @@
         <h1 class="text-2xl font-bold text-slate-800">Tableau de bord</h1>
         <p class="text-slate-500">Bienvenue sur le panneau d'administration de la Banque Ega</p>
     </div>
-
     @if (!loading() && dashboard) {
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         <div class="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm">
@@ -75,7 +74,7 @@
         <div class="lg:col-span-2 bg-white rounded-2xl border border-slate-100 shadow-sm">
             <div class="p-6 border-b border-slate-50 flex justify-between items-center">
                 <h3 class="font-bold text-slate-800 text-lg">Transactions récentes</h3>
-                <button class="text-sm text-blue-600 font-medium hover:underline">Voir tout</button>
+                <button [routerLink]="['/transaction']" class="text-sm text-blue-600 font-medium hover:underline">Voir tout</button>
             </div>
             <div class="divide-y divide-slate-50">
                 @for (t of dashboard.dernieresTransactions; track t.id) {

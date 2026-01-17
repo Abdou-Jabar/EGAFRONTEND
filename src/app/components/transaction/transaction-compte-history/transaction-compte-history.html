@@ -14,8 +14,9 @@
             </div>
         </div>
 
-        <div class="flex items-center gap-3">
-            <div class="flex items-center gap-2 bg-blue-50 text-blue-700 px-4 py-2 rounded-2xl border border-blue-100">
+        <div class="flex flex-wrap items-center gap-3">
+            <div
+                class="flex items-center gap-2 bg-blue-50 text-blue-700 px-4 py-2.5 rounded-2xl border border-blue-100">
                 <lucide-icon [name]="History" class="w-4 h-4"></lucide-icon>
                 <span class="text-sm font-bold">{{ transactions().length }} Opération(s)</span>
             </div>
@@ -26,10 +27,39 @@
                 <div class="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
                 } @else {
                 <lucide-icon [name]="Mail" class="w-4 h-4"></lucide-icon>
-                Envoyer le relevé
+                Envoyer
+                }
+            </button>
+
+            <button (click)="download()" [disabled]="downloadReleve() || transactions().length === 0"
+                class="flex items-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white px-5 py-2.5 rounded-2xl shadow-lg shadow-emerald-200 transition-all transform active:scale-95 text-sm font-bold disabled:opacity-50 disabled:cursor-not-allowed">
+                @if (downloadReleve()) {
+                <div class="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
+                } @else {
+                <lucide-icon [name]="Download" class="w-4 h-4"></lucide-icon>
+                Télécharger
                 }
             </button>
         </div>
+    </div>
+
+    <div class="bg-white p-4 rounded-2xl border border-slate-100 shadow-sm flex flex-wrap items-center gap-6">
+        <div class="flex items-center gap-4">
+            <div class="flex flex-col gap-1">
+                <label class="text-[10px] font-bold text-slate-400 uppercase ml-1">Date de début</label>
+                <input type="date" [ngModel]="startDate()" (ngModelChange)="startDate.set($event)"
+                    class="bg-slate-50 border-none rounded-xl px-3 py-2 text-sm font-bold text-slate-700 focus:ring-2 focus:ring-blue-500 outline-none transition-all">
+            </div>
+            <div class="flex flex-col gap-1">
+                <label class="text-[10px] font-bold text-slate-400 uppercase ml-1">Date de fin</label>
+                <input type="date" [ngModel]="endDate()" (ngModelChange)="endDate.set($event)"
+                    class="bg-slate-50 border-none rounded-xl px-3 py-2 text-sm font-bold text-slate-700 focus:ring-2 focus:ring-blue-500 outline-none transition-all">
+            </div>
+        </div>
+        <div class="hidden md:block h-8 w-px bg-slate-100"></div>
+        <p class="text-xs text-slate-400 italic">
+            Filtrage automatique des transactions locales
+        </p>
     </div>
 
     <div class="overflow-hidden bg-white rounded-2xl border border-slate-100 shadow-sm">
@@ -71,17 +101,17 @@
                                 }
                             </span>
                             <span class="text-[10px] font-mono text-slate-400 mt-0.5">
-                                {{ t.compteSource?.id === compteId ? 'Vers: ' + t.compteDestination?.id :
-                                'De: ' + t.compteSource?.id }}
+                                {{ t.compteSource?.id === compteId ? 'Vers: ' + t.compteDestination?.id : 'De: ' +
+                                t.compteSource?.id }}
                             </span>
                         </div>
-                        }
-                        @else {
-                        <span class="text-sm font-bold text-slate-700">
-                            {{ t.type === 'Depot' ? 'Dépôt en espèces' : 'Retrait au guichet' }}
-                        </span>
-                        <br>
-                        <span class="text-[10px] font-medium text-slate-400 italic mt-0.5">Opération directe</span>
+                        } @else {
+                        <div class="flex flex-col">
+                            <span class="text-sm font-bold text-slate-700">
+                                {{ t.type === 'Depot' ? 'Dépôt en espèces' : 'Retrait au guichet' }}
+                            </span>
+                            <span class="text-[10px] font-medium text-slate-400 italic mt-0.5">Opération directe</span>
+                        </div>
                         }
                     </td>
 
@@ -94,6 +124,15 @@
                                 {{ t.montant | number }}
                             </span>
                             <span class="text-[9px] font-bold text-slate-400 uppercase">FCFA</span>
+                        </div>
+                    </td>
+                </tr>
+                } @empty {
+                <tr>
+                    <td colspan="4" class="px-6 py-12 text-center">
+                        <div class="flex flex-col items-center gap-2 opacity-20">
+                            <lucide-icon [name]="History" class="w-12 h-12"></lucide-icon>
+                            <p class="text-sm font-bold uppercase tracking-widest">Aucune transaction trouvée</p>
                         </div>
                     </td>
                 </tr>

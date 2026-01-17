@@ -1,7 +1,8 @@
-import { Component, OnInit, signal } from '@angular/core';
+import { Component, OnInit, signal, computed } from '@angular/core';
 import { CommonModule, DatePipe, DecimalPipe } from '@angular/common';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { FormsModule } from '@angular/forms';
 import { 
   LucideAngularModule, 
   ArrowLeft, 
@@ -14,6 +15,7 @@ import {
   Mail
 } from 'lucide-angular';
 import { TransactionService } from '../../../services/transaction.service';
+import { Transaction } from '../../../models/transaction.model';
 
 @Component({
   selector: 'app-transaction-compte-history',
@@ -22,7 +24,8 @@ import { TransactionService } from '../../../services/transaction.service';
     CommonModule, 
     LucideAngularModule, 
     DatePipe, 
-    DecimalPipe
+    DecimalPipe,
+    FormsModule
   ],
   templateUrl: './transaction-compte-history.html',
   styleUrl: './transaction-compte-history.css',
@@ -37,11 +40,28 @@ export class TransactionCompteHistory implements OnInit {
   readonly X = X;
   readonly Mail = Mail;
 
-  transactions = signal<any[]>([]);
+  allTransactions = signal<Transaction[]>([]);
   sendingEmail = signal(false);
+  downloadReleve = signal(false)
   loading = signal(true);
   compteId: string | null = null;
   clientId: string | null = null;
+
+  startDate = signal<string>(new Date(new Date().getFullYear(), new Date().getMonth(), 1).toISOString().split('T')[0]);
+  endDate = signal<string>(new Date().toISOString().split('T')[0]);
+
+  transactions = computed(() => {
+    const start = new Date(this.startDate());
+    start.setHours(0, 0, 0, 0);
+    
+    const end = new Date(this.endDate());
+    end.setHours(23, 59, 59, 999);
+
+    return this.allTransactions().filter(t => {
+      const dateT = new Date(t.dateTransaction);
+      return dateT >= start && dateT <= end;
+    });
+  });
 
   constructor(
     private route: ActivatedRoute,
@@ -66,7 +86,7 @@ export class TransactionCompteHistory implements OnInit {
         const sorted = data.sort((a, b) => 
           new Date(b.dateTransaction).getTime() - new Date(a.dateTransaction).getTime()
         );
-        this.transactions.set(sorted);
+        this.allTransactions.set(sorted);
         this.loading.set(false);
       },
       error: (err) => {
@@ -103,6 +123,33 @@ export class TransactionCompteHistory implements OnInit {
         console.error('Erreur envoi email:', err);
         this.snackBar.open("Une erreur est survenue lors de l'envoi du relevé.", 'Fermer', { duration: 3000 });
         this.sendingEmail.set(false);
+      }
+    });
+  }
+
+  download(): void {
+    if (!this.compteId) return;
+
+    this.downloadReleve.set(true);
+
+    this.transactionService.telechargerReleve(this.compteId).subscribe({
+      next: (blob: Blob) => {
+        const url = window.URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        
+        link.download = `releve_${this.compteId}_${new Date().toISOString().split('T')[0]}.pdf`;
+        
+        link.click();
+        window.URL.revokeObjectURL(url);
+
+        this.snackBar.open("Téléchargement réussi", "Fermer", { duration: 3000 });
+        this.downloadReleve.set(false);
+      },
+      error: (err) => {
+        console.error('Erreur téléchargement:', err);
+        this.snackBar.open("Erreur lors du téléchargement", 'Fermer', { duration: 3000 });
+        this.downloadReleve.set(false);
       }
     });
   }

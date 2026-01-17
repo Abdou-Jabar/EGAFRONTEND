@@ -46,4 +46,14 @@ export class TransactionService {
       {}
     );
   }
+
+  telechargerReleve(numeroCompte: string): Observable<Blob> {
+    return this.http.get(`${this.apiUrl}/releve/pdf/${numeroCompte}`, {
+      responseType: 'blob'
+    });
+  }
+
+  getAllTransactions(): Observable<Transaction[]> {
+    return this.http.get<Transaction[]>(`${this.apiUrl}/all`);
+  }
 }
