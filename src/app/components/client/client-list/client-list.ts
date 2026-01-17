@@ -1,7 +1,7 @@
 import { Component, OnInit, inject, signal } from '@angular/core';
 import { ClientService } from '../../../services/client.service';
 import { Client as ClientModel } from '../../../models/client.model';
-import { DatePipe, UpperCasePipe } from '@angular/common';
+import { DatePipe } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Plus, Search, Edit, Trash2, LucideAngularModule, AlertTriangle, Wallet, Users, Mail, Phone, Globe } from 'lucide-angular';

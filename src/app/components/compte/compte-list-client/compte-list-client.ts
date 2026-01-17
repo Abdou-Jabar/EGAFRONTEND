@@ -3,15 +3,16 @@ import { ActivatedRoute, RouterLink } from '@angular/router';
 import { ClientService } from '../../../services/client.service';
 import { Compte as CompteModel } from '../../../models/compte.model';
 import { Client as ClientModel } from '../../../models/client.model';
-import { LucideAngularModule, PiggyBank, Wallet, ArrowLeft, CreditCard, ChevronRight, ArrowUp, ArrowDown, Send, Trash2, Plus, X } from 'lucide-angular';
+import { LucideAngularModule, PiggyBank, Wallet, ArrowLeft, CreditCard, ChevronRight, ArrowUp, ArrowDown, Send, Trash2, Plus, X, History } from 'lucide-angular';
 import { DecimalPipe, UpperCasePipe } from '@angular/common';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { CompteService } from '../../../services/compte.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { TransactionService } from '../../../services/transaction.service';
+import { CdkAriaLive } from "../../../../../node_modules/@angular/cdk/types/_a11y-module-chunk";
 @Component({
   selector: 'app-compte-list-client',
-  imports: [LucideAngularModule, RouterLink, DecimalPipe, UpperCasePipe, ReactiveFormsModule],
+  imports: [LucideAngularModule, RouterLink, DecimalPipe, UpperCasePipe, ReactiveFormsModule, RouterLink],
   templateUrl: './compte-list-client.html',
   styleUrls: ['./compte-list-client.css'],
 })
@@ -30,6 +31,7 @@ export class CompteListClient implements OnInit {
   readonly Trash2 = Trash2;
   readonly Plus = Plus;
   readonly X = X;
+  readonly History = History;
   isModalOpen = signal(false);
   accountForm: FormGroup;
 

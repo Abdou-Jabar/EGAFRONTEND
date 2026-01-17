@@ -86,6 +86,11 @@
                                 <lucide-icon [name]="Send" class="w-4 h-4"></lucide-icon>
                             </button>
 
+                            <a [routerLink]="['/client', client?.id, 'comptes', compte.id, 'history']"
+                                class="p-2 bg-indigo-50 text-indigo-600 hover:bg-indigo-600 hover:text-white rounded-xl transition-all shadow-sm">
+                                <lucide-icon [name]="History" class="w-4 h-4"></lucide-icon>
+                            </a>
+
                             <div class="w-px h-4 bg-slate-200 mx-1"></div>
 
                             <button (click)="openDeleteModal(compte)"
@@ -285,7 +290,7 @@
                         bénéficiaire</label>
                     <input type="text" formControlName="compteDestination"
                         class="bg-transparent border-none text-sm font-bold text-slate-800 focus:ring-0 w-full p-0"
-                        placeholder="Saisir l'IBAN destination">
+                        placeholder="Saisir le numero de compte de destination">
                 </div>
 
                 <div class="bg-slate-50 p-4 rounded-2xl mb-6 border border-slate-100">

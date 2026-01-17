@@ -28,11 +28,22 @@ export class TransactionService {
   }
 
   virement(source: string, destination: string, montant: number): Observable<string> {
-  const dto = {
-    numeroCompteSource: source,
-    numeroCompteDestination: destination,
-    solde: montant
-  };
-  return this.http.post(`${this.apiUrl}/virement`, dto, { responseType: 'text' });
-}
+    const dto = {
+      numeroCompteSource: source,
+      numeroCompteDestination: destination,
+      solde: montant
+    };
+    return this.http.post(`${this.apiUrl}/virement`, dto, { responseType: 'text' });
+  }
+
+  getHistorique(numeroCompte: string): Observable<Transaction[]> {
+    return this.http.get<Transaction[]>(`${this.apiUrl}/compte/${numeroCompte}`);
+  }
+
+  envoyerReleve(numeroCompte: string): Observable<{ message: string }> {
+    return this.http.post<{ message: string }>(
+      `${this.apiUrl}/releve/envoyer/${numeroCompte}`, 
+      {}
+    );
+  }
 }
