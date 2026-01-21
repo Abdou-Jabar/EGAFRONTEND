@@ -6,7 +6,6 @@ import { LayoutDashboard,
   Users,
   Wallet,
   ArrowLeftRight,
-  FileText,
   Settings,
   LogOut,
   Building2 ,
@@ -39,6 +38,7 @@ export class SidebarComponent {
       { label: 'Clients', icon: Users, route: '/client' },
       { label: 'Comptes', icon: Wallet, route: '/compte' },
       { label: 'Transactions', icon: ArrowLeftRight, route: '/transaction' },
+      { label: 'Parametres', icon: Settings, route: '/rapport' },
     ];
     if (this.adminData?.role === 'SUPER_ADMIN') {
       this.menuItems.push(

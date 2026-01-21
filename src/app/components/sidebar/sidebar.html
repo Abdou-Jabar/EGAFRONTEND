@@ -31,14 +31,13 @@
         <div class="flex items-center gap-3 p-2 rounded-lg bg-slate-800/30 border border-slate-700/50">
             <div
                 class="w-10 h-10 rounded-full bg-linear-to-tr from-blue-600 to-indigo-600 flex items-center justify-center text-white font-bold text-xs border border-blue-400/20 shadow-inner">
-                {{ adminData?.prenom?.charAt(0) }}{{ adminData?.nom?.charAt(0) }}
+                {{ adminData?.nom?.charAt(0) }}{{ adminData?.prenom?.charAt(0) }}
             </div>
 
             <div class="flex-1 min-w-0">
                 <p class="text-sm font-semibold text-white truncate">
-                    {{ adminData?.prenom }} <br> {{ adminData?.nom}}
+                    {{ adminData?.nom }} <br> {{ adminData?.prenom }}
                 </p>
-                <p class="text-[11px] truncate opacity-50">{{ adminData?.email }}</p>
             </div>
 
             <button (click)="onLogout()"

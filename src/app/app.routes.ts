@@ -12,6 +12,7 @@ import { ClientEdit } from './components/client/client-edit/client-edit';
 import { authGuard } from './core/guards/auth.guard';
 import { GesAdmin } from './components/ges-admin/ges-admin';
 import { AddAdmin } from './components/add-admin/add-admin';
+import { Parametres } from './components/parametres/parametres';
 export const routes: Routes = [
     { path: 'login', component: Login },
     {
@@ -28,6 +29,7 @@ export const routes: Routes = [
             { path: 'client/:clientId/comptes/:compteId/history', component: TransactionCompteHistory, canActivate: [authGuard] },
             { path: 'administrateur', component: GesAdmin, canActivate: [authGuard] },
             { path: 'administrateur/ajouter', component: AddAdmin, canActivate: [authGuard] },
+            { path: 'parametres/:id', component: Parametres, canActivate: [authGuard] },
             { path: '', redirectTo: 'dashboard', pathMatch: 'full' }
         ]   
     },

@@ -10,19 +10,16 @@ export class AuthService {
   constructor(private http: HttpClient) {}
 
 login(credentials: any): Observable<any> {
-  console.log("Tentative de connexion avec :", credentials); // Log 1
   return this.http.post(this.API_URL + 'signin', credentials).pipe(
     tap({
       next: (response: any) => {
-        console.log("Réponse reçue du serveur :", response); // Log 2
         if (response && response.token) {
           localStorage.setItem('auth-token', response.token);
           localStorage.setItem('auth-user', JSON.stringify(response));
-          console.log("Données sauvegardées dans le localStorage !");
         }
       },
       error: (err) => {
-        console.error("Erreur lors de la requête :", err); // Log d'erreur
+        console.error("Erreur lors de la requête :", err);
       }
     })
   );

@@ -27,10 +27,10 @@ export class AddAdmin implements OnInit {
     this.form = this.fb.group({
       nom: ['', [Validators.required]],
       prenom: ['', [Validators.required]],
-      username: ['', [Validators.required]], // L'identifiant de connexion
+      username: ['', [Validators.required]],
       email: ['', [Validators.required, Validators.email]],
       numero: ['', [Validators.required]],
-      role: ['ADMIN', [Validators.required]] // Par défaut ADMIN
+      role: ['ADMIN', [Validators.required]]
     });
   }
 
@@ -39,7 +39,7 @@ export class AddAdmin implements OnInit {
       this.adminService.createAdmin(this.form.value).subscribe({
         next: (response) => {
           this.snack.open(response, 'Succès', { duration: 3000 });
-          this.router.navigate(['/administrateur']); // Retour à la liste
+          this.router.navigate(['/administrateur']);
         },
         error: (err) => {
           this.snack.open("Erreur lors de la création de l'administrateur", 'X', { duration: 3000 });

@@ -158,4 +158,35 @@ closeConfirmModal() {
   this.adminToReset = null;
   this.isResetting = false;
 }
+
+// Variables d'état pour la modification
+isEditModalOpen = false;
+adminToEdit: AdminModel | null = null;
+
+// Ouvrir la modale avec les données de l'admin sélectionné
+openEditModal(admin: AdminModel) {
+  this.adminToEdit = { ...admin };
+  this.isEditModalOpen = true;
 }
+
+closeEditModal() {
+  this.isEditModalOpen = false;
+  this.adminToEdit = null;
+}
+
+confirmUpdate() {
+  if (this.adminToEdit && this.adminToEdit.id) {
+    this.adminService.updateAdmin(this.adminToEdit.id, this.adminToEdit).subscribe({
+      next: (response) => {
+        // Mettre à jour la liste locale
+        const index = this.admins.findIndex(a => a.id === this.adminToEdit?.id);
+        if (index !== -1) this.admins[index] = this.adminToEdit!;
+        
+        this.snack.open("Informations mises à jour avec succès", "OK", { duration: 3000 });
+        this.closeEditModal();
+      },
+      error: () => this.snack.open("Erreur lors de la mise à jour", "X", { duration: 3000 })
+    });
+  }
+}
+} 

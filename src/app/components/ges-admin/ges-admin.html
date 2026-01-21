@@ -50,7 +50,7 @@
                                 {{ admin.prenom[0] }}{{ admin.nom[0] }}
                             </div>
                             <div>
-                                <p class="font-bold text-slate-700">{{ admin.prenom }} {{ admin.nom }}</p>
+                                <p class="font-bold text-slate-700">{{ admin.nom }} {{ admin.prenom }}</p>
                                 <p class="text-xs text-slate-400">{{ admin.username }}</p>
                             </div>
                         </div>
@@ -75,10 +75,6 @@
                     </td>
                     <td class="p-4 text-right">
                         <div class="flex justify-end gap-2">
-                            <button title="Modifier"
-                                class="p-2 hover:bg-indigo-50 rounded-lg text-indigo-600 transition-colors">
-                                <lucide-icon [name]="Edit" class="w-4 h-4"></lucide-icon>
-                            </button>
                             <button (click)="openDeleteModal(admin)" title="Supprimer"
                                 class="p-2 hover:bg-red-50 rounded-lg text-red-500 transition-colors">
                                 <lucide-icon [name]="Trash2" class="w-4 h-4"></lucide-icon>
