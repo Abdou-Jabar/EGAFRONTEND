@@ -9,21 +9,25 @@ import { TransactionCompteHistory } from './components/transaction/transaction-c
 import { ClientAdd } from './components/client/client-add/client-add';
 import { AdminLayout } from './components/admin-component/admin-component';
 import { ClientEdit } from './components/client/client-edit/client-edit';
-
+import { authGuard } from './core/guards/auth.guard';
+import { GesAdmin } from './components/ges-admin/ges-admin';
+import { AddAdmin } from './components/add-admin/add-admin';
 export const routes: Routes = [
     { path: 'login', component: Login },
     {
         path: '',
         component: AdminLayout,
         children: [
-            { path: 'dashboard', component: Dashboard },
-            { path: 'client', component: ClientList },
-            { path: 'client/ajouter', component: ClientAdd },
-            { path: 'client/:id/comptes', component: CompteListClient },
-            { path: 'compte', component: CompteList },
-            { path: 'transaction', component: TransactionList },
-            { path: 'client/modifier/:id', component: ClientEdit },
-            { path: 'client/:clientId/comptes/:compteId/history', component: TransactionCompteHistory },
+            { path: 'dashboard', component: Dashboard, canActivate: [authGuard] },
+            { path: 'client', component: ClientList, canActivate: [authGuard] },
+            { path: 'client/ajouter', component: ClientAdd, canActivate: [authGuard] },
+            { path: 'client/:id/comptes', component: CompteListClient, canActivate: [authGuard] },
+            { path: 'compte', component: CompteList, canActivate: [authGuard] },
+            { path: 'transaction', component: TransactionList, canActivate: [authGuard] },
+            { path: 'client/modifier/:id', component: ClientEdit, canActivate: [authGuard] },
+            { path: 'client/:clientId/comptes/:compteId/history', component: TransactionCompteHistory, canActivate: [authGuard] },
+            { path: 'administrateur', component: GesAdmin, canActivate: [authGuard] },
+            { path: 'administrateur/ajouter', component: AddAdmin, canActivate: [authGuard] },
             { path: '', redirectTo: 'dashboard', pathMatch: 'full' }
         ]   
     },

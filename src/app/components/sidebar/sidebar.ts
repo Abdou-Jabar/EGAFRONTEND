@@ -9,8 +9,10 @@ import { LayoutDashboard,
   FileText,
   Settings,
   LogOut,
-  Building2 
+  Building2 ,
+  LucideShieldUser
 } from 'lucide-angular';
+import { AuthService } from '../../core/service/auth.service';
 
 @Component({
   selector: 'app-sidebar',
@@ -21,10 +23,30 @@ import { LayoutDashboard,
 export class SidebarComponent {
   readonly Building2 = Building2;
   readonly LogOut = LogOut;
-  menuItems = [
-    { label: 'Tableau de bord', icon: LayoutDashboard, route: '/dashboard' },
-    { label: 'Clients', icon: Users, route: '/client' },
-    { label: 'Comptes', icon: Wallet, route: '/compte' },
-    { label: 'Transactions', icon: ArrowLeftRight, route: '/transaction' },
-  ];
+  adminData: any;
+  menuItems: any[] = [];
+  isModalOpen = false;
+
+  ngOnInit() {
+    this.adminData = this.authService.getUser();
+    this.setupMenu();
+  }
+
+  constructor(private authService: AuthService) {}
+  setupMenu() {
+    this.menuItems = [
+      { label: 'Tableau de bord', icon: LayoutDashboard, route: '/dashboard' },
+      { label: 'Clients', icon: Users, route: '/client' },
+      { label: 'Comptes', icon: Wallet, route: '/compte' },
+      { label: 'Transactions', icon: ArrowLeftRight, route: '/transaction' },
+    ];
+    if (this.adminData?.role === 'SUPER_ADMIN') {
+      this.menuItems.push(
+        { label: 'Administrateurs', icon: LucideShieldUser, route: '/administrateur' },      
+      );
+    }
+  }
+  onLogout() {
+    this.authService.logout();
+  }
 }
