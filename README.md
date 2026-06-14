@@ -1,5 +1,12 @@
 # EGAFrontend
 
+## Login Page
+<img width="1600" height="900" alt="Screenshot-20260614-13:33:48" src="https://github.com/user-attachments/assets/221453a7-97b1-4fc6-9953-a79e911c43c7" />
+
+## Dashboard
+<img width="1600" height="900" alt="Screenshot-20260614-19:09:37" src="https://github.com/user-attachments/assets/5de8d3e5-fde4-4236-a65d-0c36a8753c5c" />
+
+
 This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 21.0.3.
 
 ## Development server
